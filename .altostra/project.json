@@ -188,5 +188,6 @@
 			"name": "fsc-demo",
 			"unsafe": false
 		}
-	]
+	],
+	"type": "altostra"
 }
