@@ -1,0 +1,7 @@
+FROM node:12
+
+RUN ["mkdir", "-p", "/root/fsc"]
+WORKDIR /root/fsc
+
+COPY node_modules node_modules
+COPY code/* /root/fsc/

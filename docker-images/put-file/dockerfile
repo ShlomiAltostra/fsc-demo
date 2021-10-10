@@ -1,0 +1,3 @@
+FROM 207885204536.dkr.ecr.us-east-1.amazonaws.com/fsc-demo:base
+
+ENTRYPOINT [ "node", "put-file.js" ]

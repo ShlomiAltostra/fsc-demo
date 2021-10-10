@@ -1,0 +1,192 @@
+{
+	"id": "fsc-demo",
+	"name": "fsc-demo",
+	"description": "An empty project template",
+	"created": "2021-10-10T15:28:24.762Z",
+	"blueprints": [
+		{
+			"version": "2019-10-24",
+			"connections": {
+				"Scheduler01": {
+					"PutFile01": {
+						"type": "connection.trigger.container",
+						"from": "Scheduler01",
+						"to": "PutFile01",
+						"vpc": {
+							"securityGroupIds": [
+								"sg-0f9302a00400cb0bd"
+							],
+							"subnetIds": [
+								"subnet-0314c10ed209b1f69",
+								"subnet-07e27daff27fdd40d"
+							]
+						}
+					}
+				},
+				"PutFile01": {
+					"Bucket01": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "PutFile01",
+						"to": "Bucket01"
+					}
+				},
+				"Bucket01": {
+					"EnqueueFile01": {
+						"type": "connection.file-store.trigger.container",
+						"from": "Bucket01",
+						"to": "EnqueueFile01",
+						"vpc": {
+							"securityGroupIds": [
+								"sg-0f9302a00400cb0bd"
+							],
+							"subnetIds": [
+								"subnet-0314c10ed209b1f69",
+								"subnet-07e27daff27fdd40d"
+							]
+						},
+						"eventsFilter": [
+							"create-or-update"
+						]
+					}
+				},
+				"EnqueueFile01": {
+					"Bucket01": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "EnqueueFile01",
+						"to": "Bucket01"
+					},
+					"Queue01": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "EnqueueFile01",
+						"to": "Queue01"
+					}
+				},
+				"Queue01": {
+					"Function01": {
+						"type": "connection.trigger",
+						"from": "Queue01",
+						"to": "Function01"
+					}
+				},
+				"Function01": {
+					"LogFile01": {
+						"type": "connection.access.invocation",
+						"from": "Function01",
+						"to": "LogFile01"
+					}
+				}
+			},
+			"resources": {
+				"Scheduler01": {
+					"type": "resource.scheduler",
+					"name": "Scheduler01",
+					"rate": {
+						"amount": 5,
+						"unit": "minutes"
+					},
+					"id": "Scheduler01"
+				},
+				"PutFile01": {
+					"type": "resource.compute.serverless-container",
+					"name": "put-file",
+					"memory": 0.5,
+					"vCPU": 0.25,
+					"image": "207885204536.dkr.ecr.us-east-1.amazonaws.com/fsc-demo:put-file",
+					"id": "PutFile01"
+				},
+				"Bucket01": {
+					"type": "resource.file-store",
+					"name": "Bucket01",
+					"accessLevel": "private",
+					"filesSources": [
+						{
+							"type": "files-source.project-dir",
+							"path": "files"
+						}
+					],
+					"id": "Bucket01"
+				},
+				"EnqueueFile01": {
+					"type": "resource.compute.serverless-container",
+					"name": "enqueue-file",
+					"memory": 0.5,
+					"vCPU": 0.25,
+					"image": "207885204536.dkr.ecr.us-east-1.amazonaws.com/fsc-demo:enqueue-file",
+					"id": "EnqueueFile01"
+				},
+				"Queue01": {
+					"type": "resource.message-queue",
+					"name": "Queue01",
+					"delay": 0,
+					"retentionPeriod": 345600,
+					"maxMessageSize": 262144,
+					"id": "Queue01"
+				},
+				"Function01": {
+					"type": "resource.compute.function",
+					"name": "Function01",
+					"entryPoint": "functions/Function01.handler",
+					"memory": 512,
+					"runtime": "nodejs12.x",
+					"timeout": 6,
+					"id": "Function01"
+				},
+				"LogFile01": {
+					"type": "resource.compute.serverless-container",
+					"name": "log-file",
+					"memory": 0.5,
+					"vCPU": 0.25,
+					"image": "207885204536.dkr.ecr.us-east-1.amazonaws.com/fsc-demo:log-file",
+					"id": "LogFile01"
+				}
+			},
+			"metadata": {
+				"designer": {
+					"resourcePositions": {
+						"Scheduler01": {
+							"x": -314.44444274902344,
+							"y": -237.77775955200195,
+							"z": 0
+						},
+						"PutFile01": {
+							"x": -221.88888549804688,
+							"y": -154.44444274902344,
+							"z": 0
+						},
+						"Bucket01": {
+							"x": -111.22219848632812,
+							"y": -66.88888740539551,
+							"z": 0
+						},
+						"EnqueueFile01": {
+							"x": -12.5555419921875,
+							"y": 15.222223281860352,
+							"z": 0
+						},
+						"Queue01": {
+							"x": 82.042724609375,
+							"y": 93.24072265625,
+							"z": 0
+						},
+						"Function01": {
+							"x": 179.82058715820312,
+							"y": 159.90738677978516,
+							"z": 0
+						},
+						"LogFile01": {
+							"x": 292.0428466796875,
+							"y": 233.24073028564453,
+							"z": 0
+						}
+					}
+				}
+			},
+			"id": "fsc-demo",
+			"name": "fsc-demo",
+			"unsafe": false
+		}
+	]
+}
