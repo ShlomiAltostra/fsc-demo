@@ -6,7 +6,7 @@ module.exports.handler = async ({
   const ecs = new ECS()
 
   const {
-    TASK_DEF_FSC: taskDef,
+    TASK_DEF_LOGFILE01: taskDef,
     SERVERLESS_CLUSTER: cluster,
   } = process.env
 
